@@ -11,19 +11,29 @@ import ShoppingCart from './components/ShoppingCart';
 import ProductContext from './contexts/ProductContext';
 import CartContext from './contexts/CartContexts';
 
+const checkLocalStorage = () => {
+	if(localStorage.cart) {
+		return JSON.parse(localStorage.cart);
+	} else {
+		return []
+	}
+};
+
 function App() {
+	checkLocalStorage()
 	const [products] = useState(data);
-	const [cart, setCart] = useState([]);
+	const [cart, setCart] = useState(checkLocalStorage());
 
 	const addItem = item => {
 		setCart([...cart, item]);
+		localStorage.cart = JSON.stringify([...cart, item]);
 	};
 
 	const removeItem = id => {
 		let updatedCart = cart.filter(item => {
 			if(item.id !== id) return item;
 		})
-
+		localStorage.cart = JSON.stringify(updatedCart);
 		setCart(updatedCart);
 	}
 
